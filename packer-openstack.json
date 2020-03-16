@@ -1,0 +1,12 @@
+{
+	"builders": [
+		{
+			"type": "openstack",
+			"ssh_username": "root",
+			"image_name": "Test image packer 16h22",
+			"source_image": "cbe0df31-1150-488a-a9b2-612c745e1be0",
+			"flavor": "s3.large.2",
+			"networks": "ff9f3984-3b88-42ca-b2af-cb61c6d64c3a"
+		}
+	]
+}
