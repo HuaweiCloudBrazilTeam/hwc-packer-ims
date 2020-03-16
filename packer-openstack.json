@@ -12,7 +12,15 @@
 			"flavor": "s3.large.2",
 			"networks": "{{user `network`}}",
 			"availability_zone": "{{user `availability_zone`}}",
-			"use_blockstorage_volume": "true"
+			"image_disk_format": "zvhd2"
+		}
+	],
+	"provisioners": [
+		{
+			"type": "shell",
+			"inline": [
+				"echo 'rubber ducky'> /tmp/ducky.txt"
+			]
 		}
 	]
 }
