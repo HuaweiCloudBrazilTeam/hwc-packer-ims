@@ -1,13 +1,14 @@
 {
 	"variables": {
-	  "availability_zone": ""
+		"availability_zone": "",
+		"subnet": ""
 	},
 	"builders": [
 		{
 			"type": "openstack",
 			"ssh_username": "root",
-			"image_name": "Test image packer 16h22",
-			"image_name": "Ubuntu 18.04 server 64bit",
+			"image_name": "Packer test image",
+			"source_image_name": "Ubuntu 18.04 server 64bit",
 			"flavor": "s3.large.2",
 			"networks": "ff9f3984-3b88-42ca-b2af-cb61c6d64c3a",
 			"availability_zone": "{{user `availability_zone`}}"
