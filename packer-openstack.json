@@ -11,7 +11,8 @@
 			"source_image_name": "Ubuntu 18.04 server 64bit",
 			"flavor": "s3.large.2",
 			"networks": "{{user `network`}}",
-			"availability_zone": "{{user `availability_zone`}}"
+			"availability_zone": "{{user `availability_zone`}}",
+			"use_blockstorage_volume": "true"
 		}
 	]
 }
