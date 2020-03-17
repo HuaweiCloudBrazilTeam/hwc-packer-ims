@@ -1,0 +1,38 @@
+{
+    "builders": [
+        {
+            "type": "huaweicloud-ecs",
+            "image_name": "{{ image_name }}",
+            "identity_endpoint": "https://iam.myhwclouds.com:443/v3",
+            "username": "{{ username }}",
+            "password": "{{ password }}",
+            "tenant_name": "ap-southeast-1",
+            "domain_name": "{{ domain_name }}",
+            "insecure": "true",
+            "region": "ap-southeast-1",
+            "source_image": "{{ source_image }}",
+            "flavor": "s3.medium.2",
+            "vpc_id": "{{ vpc_id }}",
+            "subnets": [
+                "{{ subnet }}"
+            ],
+            "security_groups": [
+                "{{ security_group }}"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "echo \"start install nginx, sleep 20s first\"",
+                "sleep 20",
+                "echo \"run install\"",
+                "yum -y install nginx",
+                "echo \"enable nginx\"",
+                "systemctl enable nginx.service",
+                "echo \"install nginx done\""
+            ]
+        }
+    ]
+}
