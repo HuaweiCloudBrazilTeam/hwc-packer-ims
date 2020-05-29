@@ -43,11 +43,16 @@ export AZ=`(openstack availability zone list -f value -c "Zone Name"|head -n 1)`
 openstack subnet list -c Name -c Network -c Subnet
 export SUBNET_ID="<subnet_id>"
 
+
+# Selecting an unbounded EIP (Floating IP)
+export EIP_ID=$(openstack floating ip list --status DOWN -f json | jq -r .[0].ID)
+
 packer build \
     -on-error=ask \
     -var "availability_zone=$AZ"\
-    -var "network=$SUBNET_ID"\
-    packer-openstack.json
+    -var "networks=$SUBNET_ID" \
+    -var "floating_ip=$EIP_ID" \
+    packer-openstack-ims.json
 
 openstack image list --private
 ```

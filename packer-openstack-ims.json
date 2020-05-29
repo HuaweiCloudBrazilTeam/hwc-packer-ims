@@ -1,24 +1,36 @@
 {
+  "variables": {
+    "identity_endpoint": "{{env `OS_AUTH_URL`}}",
+    "tenant_name": "{{env `OS_PROJECT_NAME`}}",
+    "domain_name": "{{env `OS_DOMAIN_NAME`}}",
+    "username": "{{env `OS_USERNAME`}}",
+    "password": "{{env `OS_PASSWORD`}}",
+
+    "flavor": "s3.large.2",
+    "source_image": "cbe0df31-1150-488a-a9b2-612c745e1be0",
+    "networks": null,
+    "floating_ip": null
+  },
   "builders": [
     {
       "type": "openstack",
-      "identity_endpoint": "https://iam.xxx.com/v3",
-      "tenant_name": "xxx",
-      "domain_name": "domain_name",
-      "username": "username",
-      "password": "password",
+      "identity_endpoint": "{{ user `identity_endpoint` }}",
+      "tenant_name": "{{ user `tenant_name` }}",
+      "domain_name": "{{ user `domain_name` }}",
+      "username": "{{ user `username` }}",
+      "password": "{{ user `password` }}",
       "ssh_username": "root",
-      "region": "xxx",
+      "region": "{{ user `region` }}",
       "image_name": "Ubuntu-image-updating-powered-by-Packer",
       "instance_name": "Ubuntu-image-updating-powered-by-Packer",
-      "source_image": "f1dd2272-7041-479e-9663-646632b6ac00",
-      "availability_zone": "xxx",
-      "flavor": "s3.medium.2",
+      "source_image": "{{ user `source_image` }}",
+      "availability_zone": "{{ user `availability_zone` }}",
+      "flavor": "{{ user `flavor` }}",
       "use_blockstorage_volume": true,
       "networks": [
-        "11d661c4-e41f-487f-a6f6-9b88d623dd5d"
+        "{{ user `networks` }}"
       ],
-      "floating_ip": "8f686f9a-3408-4fdd-be75-ea768065800c"
+      "floating_ip": "{{ user `floating_ip` }}"
     }
   ],
   "provisioners": [
