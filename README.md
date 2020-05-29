@@ -3,6 +3,7 @@ Playing with packer
 
 ## Docs
 * https://packer.io/docs/builders/openstack.html
+* [Huawei Cloud IMS: Creating a Private Image Using Packer](https://support.huaweicloud.com/intl/en-us/bestpractice-ims/ims_bp_0031.html)
 
 
 ## Account parameters
@@ -30,6 +31,9 @@ openstack image list | grep -i "centos"
 Assuming that you already have packer installed, along with OpenStackClient. 
 
 ```bash
+# Debug messages
+export PACKER_LOG=1
+
 # Selecting the first AZ in Region
 export AZ=`(openstack availability zone list -f value -c "Zone Name"|head -n 1)`
 
