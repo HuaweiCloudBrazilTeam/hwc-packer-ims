@@ -1,16 +1,9 @@
-# packer-tests
-Playing with packer
+# Using Packer with Huawei Cloud IMS
+
 
 ## Docs
 * https://packer.io/docs/builders/openstack.html
 * [Huawei Cloud IMS: Creating a Private Image Using Packer](https://support.huaweicloud.com/intl/en-us/bestpractice-ims/ims_bp_0031.html)
-
-
-## Account parameters
-```bash
-# https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/availability-zone.html
-openstack availability zone list
-```
 
 ## Selecting base image
 
@@ -43,7 +36,7 @@ export PACKER_LOG=1
 # Selecting the first AZ in Region
 export AZ=`(openstack availability zone list -f value -c "Zone Name"|head -n 1)`
 
-# Selecting the network (VPC) and subnet
+# Manually selecting the network (VPC) and subnet
 ## https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/network.html#network-list
 ## https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/subnet.html#subnet-list
 openstack subnet list -c Name -c Network -c Subnet
