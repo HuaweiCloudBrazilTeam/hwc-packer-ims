@@ -46,13 +46,15 @@ export SUBNET_ID="<subnet_id>"
 # Selecting an unbounded EIP (Floating IP)
 export EIP_ID=$(openstack floating ip list --status DOWN -f json | jq -r .[0].ID)
 
-
+# Selecting base image
+export SOURCE_IMAGE_ID=$(openstack image list --name "Ubuntu 18.04 server 64bit" -f value -c ID)
 
 packer build \
     -on-error=ask \
     -var "availability_zone=$AZ"\
     -var "networks=$SUBNET_ID" \
     -var "floating_ip=$EIP_ID" \
+    -var "source_image=$SOURCE_IMAGE_ID" \
     packer-openstack-ims.json
 
 openstack image list --private

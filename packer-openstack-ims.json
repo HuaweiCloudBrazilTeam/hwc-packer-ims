@@ -7,7 +7,7 @@
     "password": "{{env `OS_PASSWORD`}}",
 
     "flavor": "s3.large.2",
-    "source_image": "cbe0df31-1150-488a-a9b2-612c745e1be0",
+    "source_image": null,
     "networks": null,
     "floating_ip": null
   },
