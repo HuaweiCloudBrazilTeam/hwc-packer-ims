@@ -8,6 +8,7 @@
 ## Selecting base image
 
 * https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/image.html#image-list
+* https://wiki.openstack.org/wiki/Glance-v2-community-image-sharing-faq
 
 ```bash
 openstack image list --public
