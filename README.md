@@ -1,5 +1,5 @@
-# packer-tests
-Playing with packer
+# Using Packer with Huawei Cloud IMS
+
 
 ## Docs
 * https://packer.io/docs/builders/openstack.html
