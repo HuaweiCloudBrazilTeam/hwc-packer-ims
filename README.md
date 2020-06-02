@@ -10,6 +10,12 @@
 * https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/image.html#image-list
 
 ```bash
+openstack image list --public
+
+openstack image list --public --name "Ubuntu 18.04 server 64bit"
+openstack image list --public | grep -i "ubuntu"
+openstack image list --public | grep -i "centos"
+
 # owned by HWC in ap-southeast-1
 openstack image list  --status active \
     --property 'owner=c16e072bc1334180868fd8ae507c80ad'\
@@ -18,11 +24,6 @@ openstack image list  --status active \
 # owned by HWC in sa-brazil-1
 openstack image list  --status active \
     --property 'owner=31c994ac72fe4640be63048da1a58429'
-
-
-openstack image list --name "Ubuntu 18.04 server 64bit"
-openstack image list | grep -i "ubuntu"
-openstack image list | grep -i "centos"
 ```
 
 ## Building a image
@@ -47,7 +48,7 @@ export SUBNET_ID="<subnet_id>"
 export EIP_ID=$(openstack floating ip list --status DOWN -f json | jq -r .[0].ID)
 
 # Selecting base image
-export SOURCE_IMAGE_ID=$(openstack image list --name "Ubuntu 18.04 server 64bit" -f value -c ID)
+export SOURCE_IMAGE_ID=$(openstack image list --public --name "Ubuntu 18.04 server 64bit" -f value -c ID)
 
 packer build \
     -on-error=ask \
