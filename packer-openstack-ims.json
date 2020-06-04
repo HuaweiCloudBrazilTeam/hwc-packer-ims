@@ -22,6 +22,10 @@
       "ssh_username": "root",
       "region": "{{ user `region` }}",
       "image_name": "Ubuntu-image-updating-powered-by-Packer",
+      "image_tags": [
+        "packer",
+        "packer-tests"
+      ],
       "instance_name": "Ubuntu-image-updating-powered-by-Packer",
       "source_image": "{{ user `source_image` }}",
       "availability_zone": "{{ user `availability_zone` }}",
