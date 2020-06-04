@@ -48,6 +48,9 @@ packer version
 Assuming that you already have packer installed, along with OpenStackClient. 
 
 ```bash
+# (optional) Enable debug messages
+export PACKER_LOG=1
+
 # Selecting the first AZ in Region
 export AZ=`(openstack availability zone list -f value -c "Zone Name"|head -n 1)`
 
