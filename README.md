@@ -27,14 +27,27 @@ openstack image list  --status active \
     --property 'owner=31c994ac72fe4640be63048da1a58429'
 ```
 
+## Installing Packer v1.4.2
+
+**FIXME:** Workaround for API incompatibility bug regression in newer releases. Should be fixed in Packer v.1.6.0. More details in this [issue](https://github.com/hashicorp/packer/issues/9190).
+
+```bash
+pushd /tmp
+# Assuming that you are running in an x86-64 Linux environment.
+wget https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip
+unzip packer_1.4.2_linux_amd64.zip
+sudo install packer /usr/local/bin
+popd
+
+which packer
+packer version
+```
+
 ## Building a image
 
 Assuming that you already have packer installed, along with OpenStackClient. 
 
 ```bash
-# Debug messages
-export PACKER_LOG=1
-
 # Selecting the first AZ in Region
 export AZ=`(openstack availability zone list -f value -c "Zone Name"|head -n 1)`
 
@@ -44,9 +57,8 @@ export AZ=`(openstack availability zone list -f value -c "Zone Name"|head -n 1)`
 openstack subnet list -c Name -c Network -c Subnet
 export SUBNET_ID="<subnet_id>"
 
-
 # Selecting an unbounded EIP (Floating IP)
-export EIP_ID=$(openstack floating ip list --status DOWN -f json | jq -r .[0].ID)
+export EIP_ID=$(openstack floating ip list --status DOWN -f value -c ID|head -n 1)
 
 # Selecting base image
 export SOURCE_IMAGE_ID=$(openstack image list --public --name "Ubuntu 18.04 server 64bit" -f value -c ID)
