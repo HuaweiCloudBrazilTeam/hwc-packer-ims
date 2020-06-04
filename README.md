@@ -80,8 +80,16 @@ export AZ=$(openstack availability zone list -f value -c "Zone Name"|head -n 1)
 openstack subnet list -c Name -c Network -c Subnet
 export SUBNET_ID="<subnet_id>"
 
+
+# If you don't have any unbounded (unused) Elastic IP, you should create one first
+openstack floating ip list --status DOWN # this will return empty
+openstack floating ip create admin_external_net
+
+
 # Selecting an unbounded EIP (Floating IP)
 export EIP_ID=$(openstack floating ip list --status DOWN -f value -c ID|head -n 1)
+
+
 
 # Selecting base image
 export SOURCE_IMAGE_ID=$(openstack image list --public --name "Ubuntu 18.04 server 64bit" -f value -c ID)
@@ -97,4 +105,25 @@ packer build \
 
 # Your newly created image should be listed here
 openstack image list --private --long
+```
+
+
+## Testing the built image
+
+```bash
+export TEST_SERVER_NAME="packer-ubuntu-test-server_$(date +%F-%kh%M)"
+
+openstack server create \
+  --image "Ubuntu-image-updating-powered-by-Packer" \
+  --flavor "s3.large.2" \
+  --availability-zone "$AZ" \
+  --network "$SUBNET_ID" \
+  "$TEST_SERVER_NAME"
+
+# FIXME: Find a way to attach an EIP during server creation
+openstack server add floating ip packer-ubuntu-test-server $EIP_ID
+
+### CONNECT TO THE SERVER AND DO THE REQUIRED VERIFICATIONS
+
+openstack server delete "$TEST_SERVER_NAME"
 ```
