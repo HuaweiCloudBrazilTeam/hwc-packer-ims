@@ -8,8 +8,7 @@
     "password": "{{env `OS_PASSWORD`}}",
     "flavor": "s3.large.2",
     "source_image": null,
-    "networks": null,
-    "floating_ip": null
+    "networks": null
   },
   "builders": [
     {
@@ -34,7 +33,7 @@
       "networks": [
         "{{ user `networks` }}"
       ],
-      "floating_ip": "{{ user `floating_ip` }}"
+      "floating_ip_network": "admin_external_net"
     }
   ],
   "provisioners": [
