@@ -8,7 +8,8 @@
     "password": "{{env `OS_PASSWORD`}}",
     "flavor": "s3.large.2",
     "source_image": null,
-    "networks": null
+    "networks": null,
+    "security_groups": "default"
   },
   "builders": [
     {
@@ -32,6 +33,9 @@
       "use_blockstorage_volume": true,
       "networks": [
         "{{ user `networks` }}"
+      ],
+      "security_groups": [
+       "{{ user `security_groups` }}"
       ],
       "floating_ip_network": "admin_external_net"
     }
