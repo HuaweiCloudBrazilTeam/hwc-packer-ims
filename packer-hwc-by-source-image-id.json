@@ -1,0 +1,60 @@
+{
+  "variables": {
+    "identity_endpoint": "{{env `OS_AUTH_URL`}}",
+    "tenant_name": "{{env `OS_PROJECT_NAME`}}",
+    "region": "{{env `OS_PROJECT_NAME`}}",
+    "domain_name": "{{env `OS_DOMAIN_NAME`}}",
+    "username": "{{env `OS_USERNAME`}}",
+    "password": "{{env `OS_PASSWORD`}}",
+    "flavor": "s3.large.2",
+    "source_image": null,
+    "networks": null,
+    "security_groups": "default"
+  },
+  "builders": [
+    {
+      "type": "openstack",
+      "identity_endpoint": "{{ user `identity_endpoint` }}",
+      "tenant_name": "{{ user `tenant_name` }}",
+      "domain_name": "{{ user `domain_name` }}",
+      "username": "{{ user `username` }}",
+      "password": "{{ user `password` }}",
+      "ssh_username": "root",
+      "region": "{{ user `region` }}",
+      "image_name": "Ubuntu-image-updating-powered-by-Packer",
+      "image_tags": [
+        "packer",
+        "packer-tests"
+      ],
+      "instance_name": "Ubuntu-image-updating-powered-by-Packer",
+      "source_image": "{{ user `source_image` }}",
+      "availability_zone": "{{ user `availability_zone` }}",
+      "flavor": "{{ user `flavor` }}",
+      "use_blockstorage_volume": true,
+      "networks": [
+        "{{ user `networks` }}"
+      ],
+      "security_groups": [
+       "{{ user `security_groups` }}"
+      ],
+      "floating_ip_network": "admin_external_net"
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "echo Hello from Packer Shell provisioner"
+      ],
+      "inline_shebang": "/bin/sh -x",
+      "type": "shell",
+      "skip_clean": true
+    }
+  ],
+  "post-processors": [
+    {
+      "strip_path": true,
+      "output": "packer-template-ubuntu-updating-result.log",
+      "type": "manifest"
+    }
+  ]
+}
