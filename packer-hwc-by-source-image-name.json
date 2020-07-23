@@ -3,6 +3,7 @@
     "identity_endpoint": "{{env `OS_AUTH_URL`}}",
     "tenant_name": "{{env `OS_PROJECT_NAME`}}",
     "region": "{{env `OS_PROJECT_NAME`}}",
+    "availability_zone": "{{ user `region` }}a",
     "domain_name": "{{env `OS_DOMAIN_NAME`}}",
     "username": "{{env `OS_USERNAME`}}",
     "password": "{{env `OS_PASSWORD`}}",
