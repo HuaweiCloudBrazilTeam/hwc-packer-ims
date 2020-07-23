@@ -6,21 +6,17 @@ This documentation focuses in the use of the [Openstack builder](https://www.pac
 
 There is a [Huawei Cloud specific builder](https://github.com/huaweicloud/packer-builder-huaweicloud-ecs), but it is not currently maintained. I suggest to avoid it.
 
-There is a regression bug in most recent version (v1.5) of Packer when used with the Huawei Cloud IMS API. The current workaround is to use Packer v.1.4.2. More details in the next section.
-
 ## Docs
 * [Openstack builder](https://packer.io/docs/builders/openstack.html)
 * [Huawei Cloud IMS: Creating a Private Image Using Packer](https://support.huaweicloud.com/intl/en-us/bestpractice-ims/ims_bp_0031.html)
 
-## Installing Packer v1.4.2
-
-**FIXME:** Workaround for API incompatibility bug regression in newer releases. Should be fixed in Packer v.1.6.0. More details in this [issue](https://github.com/hashicorp/packer/issues/9190).
+## Installing Packer
 
 ```bash
 pushd /tmp
 # Assuming that you are running in an x86-64 Linux environment.
-wget https://releases.hashicorp.com/packer/1.4.2/packer_1.4.2_linux_amd64.zip
-unzip packer_1.4.2_linux_amd64.zip
+wget https://releases.hashicorp.com/packer/1.6.0/packer_1.6.0_linux_amd64.zip
+unzip packer_1.6.0_linux_amd64.zip
 sudo install packer /usr/local/bin
 popd
 
@@ -34,6 +30,26 @@ The simplest way to test authentication is to configure [OpenStack Client](https
 
 To install the OpenStack Client you will need Python. It's highly recommended to use [`pipx`](https://pypi.org/project/pipx) (to avoid dependencies conflicts).
 
+### Installing OpenStackClient through PIPX
+```bash
+apt update && apt install python3-pip python3-venv --yes
+python3 -m pip install pipx
+python3 -m pipx ensurepath
+source ~/.bashrc
+
+pipx install python-openstackclient
+openstack --version
+```
+
+### Configuring authentication
+
+```bash
+wget https://raw.githubusercontent.com/HuaweiCloudBrazilTeam/hwc-openstackclient/master/hwc-credentials.sh
+nano hwc-credentials.sh
+source hwc-credentials.sh
+```
+
+### Checking available images
 ```bash
 openstack image list
 openstack server list
@@ -51,18 +67,6 @@ openstack image list --public --name "Ubuntu 18.04 server 64bit"
 openstack image list --public | grep -i "ubuntu"
 openstack image list --public | grep -i "centos"
 
-# owned by HWC in ap-southeast-1
-openstack image list  --status active \
-    --property 'owner=c16e072bc1334180868fd8ae507c80ad'\
-    --property '__platform=CentOS'
-
-# owned by HWC in sa-brazil-1
-openstack image list  --status active \
-    --property 'owner=31c994ac72fe4640be63048da1a58429'
-```
-
-
-
 ## Building an image
 
 Assuming that you already have packer installed, along with OpenStackClient. 
@@ -71,25 +75,20 @@ Assuming that you already have packer installed, along with OpenStackClient.
 # (optional) Enable debug messages
 export PACKER_LOG=1
 
-# Selecting the first AZ in Region
-export AZ=$(openstack availability zone list -f value -c "Zone Name"|head -n 1)
-
-# Manually selecting the network (VPC) and subnet
-## https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/network.html#network-list
+# Manually selecting the network subnet (and indirectly also the VPC)
 ## https://docs.openstack.org/python-openstackclient/latest/cli/command-objects/subnet.html#subnet-list
 openstack subnet list -c Name -c Network -c Subnet
 export SUBNET_ID="<subnet_id>"
 
-# Selecting base image
-export SOURCE_IMAGE_ID=$(openstack image list --public --name "Ubuntu 18.04 server 64bit" -f value -c ID)
+# OR just pick the first subnet from whatever VPC
+export SUBNET_ID="$(openstack subnet list -f value -c Network|head -n 1)"
+
+
 
 # Building
 packer build \
-    -on-error=ask \
-    -var "availability_zone=$AZ"\
     -var "networks=$SUBNET_ID" \
-    -var "source_image=$SOURCE_IMAGE_ID" \
-    packer-openstack-ims.json
+    packer-hwc-by-source-image-name.json
 
 # Your newly created image should be listed here
 openstack image list --private --long
